@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 import random
 
 
@@ -77,51 +77,27 @@ def random_selection(arr: List, count: int = 1, repeat: bool = False) -> List:
     repeat -- могут ли допускаться повторения случайных
     элементов (по уполчанию False)
     """
-    # if count > len(arr) and repeat is False:
-    #     raise NegativeError("Значение `count` не должно превышать количество элементов `arr`")
-    
-    # arr = mix_array(arr)
-    # new_arr = []
-    # for _ in range(count):
-    #     def random_selection_func(arr):
-    #         arrCopy = arr.copy()
-    #         while len(arrCopy) > 1:
-    #             n = len(arrCopy)
-    #             mid = n // 2
-    #             arrCopy = random_simple([arr[:mid], arr[mid:]])[0]
-    #         if repeat is False:
-    #             if arrCopy[0] not in new_arr:
-    #                 new_arr.append(arrCopy[0])
-    #             else:
-    #                 while arrCopy[0] in new_arr:
-    #                     arrCopy = random_selection_func(arr)
-    #         else:
-    #             new_arr.append(arrCopy[0])
-    # return new_arr
-
-    if count > len(arr) and not repeat:
+    if count > len(arr) and repeat is False:
         raise NegativeError("Значение `count` не должно превышать количество элементов `arr`")
 
-    arr = mix_array(arr)
+    if count == len(arr) and repeat is False:
+        return mix_array(arr)
+
+    def random_selection_func(arr_temp):
+        global side
+        if len(arr_temp) > 1:
+            mid = len(arr_temp) // 2
+            side = random.choice([arr_temp[:mid], arr_temp[mid:]])
+            random_selection_func(arr_temp=side)
+        return side
+    
     new_arr = []
-
     for _ in range(count):
-        def random_selection_func(arr):
-            arr_copy = arr.copy()
-            while len(arr_copy) > 1:
-                n = len(arr_copy)
-                mid = n // 2
-                arr_copy = random_simple([arr_copy[:mid], arr_copy[mid:]])
-            return arr_copy[0]
-
-        selected_item = random_selection_func(arr)
-        
         if repeat:
-            new_arr.append(selected_item)
+            new_arr.append(random_selection_func(arr_temp=arr)[0])
         else:
-            while selected_item in new_arr:
-                selected_item = random_selection_func(arr)
-            new_arr.append(selected_item)
+            random_element = random_selection_func(arr_temp=arr)[0]
+            arr.remove(random_element)
+            new_arr.append(random_element)
 
     return new_arr
-

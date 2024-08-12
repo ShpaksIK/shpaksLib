@@ -11,6 +11,8 @@
 # очень случайно выбирать элементы списков благодаря 
 # библиотеки random и различным алгоритмам. 
 #
+# P.S.: Все функции возвращают список из n элементов.
+#
 #
 # Библиотека создана для себя, поэтому говно-код :)
 #
@@ -24,6 +26,5 @@
 # GitHub: https://github.com/ShpaksIK
 
 
-from .quicklyAlgorithms import *
-from .randomAlgorithms import *
-
+from .quicklyAlgorithms import selection_sort, quick_sort, binary_search, smallest_search, biggest_search
+from .randomAlgorithms import mix_array, random_simple, random_selection
